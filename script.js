@@ -370,30 +370,47 @@ function addEngineeredFeature() {
   }
 
   try {
+    const expr = math.compile(transformed);
     const values = [];
+    let skippedRows = 0;
     for (let i = 0; i < state.rawRows.length; i += 1) {
       const scope = {};
+      let hasMissing = false;
       for (const item of used) {
         const num = toNumber(getValueByColumn(i, item.original));
         if (!Number.isFinite(num)) {
-          throw new Error(
-            `Missing or invalid value in row ${i + 1} for "${item.original}".`
-          );
+          hasMissing = true;
+          break;
         }
         scope[item.token] = num;
       }
-      const result = math.evaluate(transformed, scope);
-      const numResult = toNumber(result);
-      if (!Number.isFinite(numResult)) {
-        throw new Error(`Formula returned non-numeric value at row ${i + 1}.`);
+      if (hasMissing) {
+        values.push(NaN);
+        skippedRows += 1;
+        continue;
       }
-      values.push(numResult);
+      try {
+        const result = expr.evaluate(scope);
+        const numResult = toNumber(result);
+        if (!Number.isFinite(numResult)) {
+          values.push(NaN);
+          skippedRows += 1;
+        } else {
+          values.push(numResult);
+        }
+      } catch (err) {
+        values.push(NaN);
+        skippedRows += 1;
+      }
     }
     state.engineeredData[featureName] = values;
     inferColumnMeta();
     renderVariablePool();
     updateDatasetSummary();
-    showMessage(`Feature "${featureName}" added successfully.`, "success");
+    showMessage(
+      `Feature "${featureName}" added successfully. Skipped rows: ${skippedRows}.`,
+      "success"
+    );
     featureNameInput.value = "";
   } catch (err) {
     showMessage(`Invalid formula: ${err.message}`, "error");
