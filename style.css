@@ -1,0 +1,289 @@
+:root {
+  --bg: #f5f7fb;
+  --card: #ffffff;
+  --border: #d9e1ec;
+  --text: #1f2a37;
+  --muted: #5b6b7f;
+  --primary: #2f6df3;
+  --primary-soft: #e8efff;
+  --warning: #c65f12;
+  --warning-soft: #fff2e8;
+  --danger: #b42318;
+  --success: #047857;
+  --shadow: 0 8px 20px rgba(32, 56, 85, 0.08);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.app {
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  box-shadow: var(--shadow);
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 20px;
+  margin-bottom: 16px;
+}
+
+h1, h2, h3 {
+  margin: 0 0 8px;
+}
+
+h1 {
+  font-size: 1.4rem;
+}
+
+h2 {
+  font-size: 1.1rem;
+}
+
+h3 {
+  font-size: 0.96rem;
+}
+
+.subtitle {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.35;
+}
+
+.header-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.dashboard {
+  display: grid;
+  grid-template-columns: 1.15fr 1.2fr 1.65fr;
+  gap: 14px;
+}
+
+.panel {
+  padding: 16px;
+  min-height: 680px;
+}
+
+.group {
+  margin-top: 12px;
+}
+
+.summary {
+  margin-bottom: 10px;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.small {
+  font-size: 0.9rem;
+}
+
+.cards-wrap {
+  min-height: 80px;
+  border: 1px dashed var(--border);
+  border-radius: 10px;
+  padding: 10px;
+  background: #fafcff;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.var-card,
+.chip {
+  border: 1px solid #bfd0ec;
+  background: #f2f7ff;
+  color: #13325e;
+  border-radius: 10px;
+  padding: 7px 10px;
+  font-size: 0.9rem;
+  cursor: grab;
+  user-select: none;
+}
+
+.var-card.non-numeric,
+.chip.non-numeric {
+  border-color: #ffd7ba;
+  background: var(--warning-soft);
+  color: var(--warning);
+}
+
+.badge {
+  margin-left: 6px;
+  padding: 2px 6px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  border: 1px solid #f4c7a1;
+  background: #fff7ef;
+}
+
+.drop-block {
+  margin-bottom: 14px;
+}
+
+.drop-zone {
+  min-height: 74px;
+  border: 1.4px dashed #b8c7dc;
+  border-radius: 10px;
+  padding: 10px;
+  background: #f9fbff;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-content: flex-start;
+}
+
+.drop-zone.drag-over,
+#poolDropZone.drag-over .cards-wrap {
+  border-color: var(--primary);
+  background: var(--primary-soft);
+}
+
+.placeholder {
+  color: #7388a4;
+  font-size: 0.9rem;
+}
+
+.feature-box {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px;
+  background: #fcfdff;
+}
+
+.text-input {
+  width: 100%;
+  margin-top: 8px;
+  padding: 9px 10px;
+  border: 1px solid #c9d6e8;
+  border-radius: 8px;
+  font-size: 0.92rem;
+}
+
+.actions-row {
+  margin-top: 14px;
+  display: flex;
+  gap: 10px;
+}
+
+.btn {
+  border: 1px solid #98b4ea;
+  border-radius: 8px;
+  padding: 9px 12px;
+  background: #ebf2ff;
+  color: #163b71;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn:hover {
+  filter: brightness(0.98);
+}
+
+.btn-primary {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #fff;
+}
+
+.btn-secondary {
+  background: #f3f6fb;
+  border-color: #ccdae9;
+  color: #304761;
+}
+
+.message {
+  margin-top: 12px;
+  min-height: 24px;
+  font-size: 0.94rem;
+}
+
+.message.error {
+  color: var(--danger);
+}
+
+.message.success {
+  color: var(--success);
+}
+
+.equation {
+  margin: 6px 0 12px;
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #f9fbff;
+  white-space: pre-wrap;
+  font-size: 0.9rem;
+}
+
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.metric {
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  background: #f9fbff;
+  padding: 9px;
+}
+
+.metric-label {
+  display: block;
+  font-size: 0.82rem;
+  color: var(--muted);
+}
+
+.metric-value {
+  display: block;
+  font-size: 1.06rem;
+  font-weight: 700;
+  margin-top: 4px;
+}
+
+.plots {
+  display: grid;
+  grid-template-rows: 230px 230px 230px;
+  gap: 10px;
+}
+
+.plot {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #fff;
+}
+
+@media (max-width: 1200px) {
+  .dashboard {
+    grid-template-columns: 1fr;
+  }
+
+  .panel {
+    min-height: 0;
+  }
+}

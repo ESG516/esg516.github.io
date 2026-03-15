@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ESG Regression Playground</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app">
+    <header class="topbar card">
+      <div>
+        <h1>ESG Regression Playground</h1>
+        <p class="subtitle">
+          1) Upload CSV 2) Drag target variable 3) Drag factor variables
+          4) Optionally create engineered features 5) Click Confirm Model
+        </p>
+      </div>
+      <div class="header-actions">
+        <input id="csvInput" type="file" accept=".csv,text/csv" hidden />
+        <button id="uploadBtn" class="btn">Upload CSV</button>
+        <button id="loadExampleBtn" class="btn btn-secondary">Load Example CSV</button>
+      </div>
+    </header>
+
+    <main class="dashboard">
+      <section class="panel card left-panel" id="poolDropZone">
+        <h2>Variable Pool</h2>
+        <div id="datasetSummary" class="summary muted">No dataset loaded.</div>
+
+        <div class="group">
+          <h3>Original Variables</h3>
+          <div id="originalVars" class="cards-wrap"></div>
+        </div>
+
+        <div class="group">
+          <h3>Engineered Features</h3>
+          <div id="engineeredVars" class="cards-wrap"></div>
+        </div>
+      </section>
+
+      <section class="panel card center-panel">
+        <h2>Model Builder</h2>
+
+        <div class="drop-block">
+          <h3>TARGET</h3>
+          <div id="targetZone" class="drop-zone">
+            <span class="placeholder">Drop exactly one variable here</span>
+          </div>
+        </div>
+
+        <div class="drop-block">
+          <h3>FACTORS</h3>
+          <div id="factorsZone" class="drop-zone">
+            <span class="placeholder">Drop one or more variables here</span>
+          </div>
+        </div>
+
+        <div class="feature-box">
+          <h3>Feature Engineering</h3>
+          <p class="muted small">
+            Supported examples: <code>x / y</code>, <code>x * y</code>, <code>x + y</code>,
+            <code>x - y</code>, <code>x^2</code>, <code>log(x)</code>
+          </p>
+          <input
+            id="featureNameInput"
+            class="text-input"
+            type="text"
+            placeholder="Feature name (optional)"
+          />
+          <input
+            id="formulaInput"
+            class="text-input"
+            type="text"
+            placeholder="Formula, e.g. Revenue / CarbonEmissions"
+          />
+          <button id="addFeatureBtn" class="btn btn-secondary">Add Feature</button>
+        </div>
+
+        <div class="actions-row">
+          <button id="confirmModelBtn" class="btn btn-primary">Confirm Model</button>
+          <button id="clearModelBtn" class="btn btn-secondary">Clear Model</button>
+        </div>
+
+        <div id="messageBox" class="message muted"></div>
+      </section>
+
+      <section class="panel card right-panel">
+        <h2>Model Results</h2>
+
+        <div>
+          <h3>Model Equation</h3>
+          <pre id="equationBox" class="equation">No model yet.</pre>
+        </div>
+
+        <div class="metrics">
+          <div class="metric">
+            <span class="metric-label">MSE</span>
+            <span id="mseValue" class="metric-value">-</span>
+          </div>
+          <div class="metric">
+            <span class="metric-label">R²</span>
+            <span id="r2Value" class="metric-value">-</span>
+          </div>
+          <div class="metric">
+            <span class="metric-label">Rows Used</span>
+            <span id="rowsUsedValue" class="metric-value">-</span>
+          </div>
+        </div>
+
+        <div class="plots">
+          <div id="predictedActualPlot" class="plot"></div>
+          <div id="residualPlot" class="plot"></div>
+          <div id="coefPlot" class="plot"></div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjs@12.4.1/lib/browser/math.min.js"></script>
+  <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
