@@ -1,0 +1,329 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ESG Research Report Template</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div>
+        <h1 id="report-title">Does ESG Performance Improve Firm Financial Performance?</h1>
+        <p class="meta">
+          <span id="report-author">Author: Your Name</span>
+          <span id="report-dataset">Dataset: esg_dataset.xlsx / uploaded CSV-JSON</span>
+        </p>
+      </div>
+      <div class="progress-wrap">
+        <label for="progress">Reading Progress</label>
+        <progress id="progress" max="100" value="0"></progress>
+      </div>
+    </div>
+    <nav class="navbar">
+      <a href="#overview">Overview</a>
+      <a href="#data-overview">Data</a>
+      <a href="#eda">EDA</a>
+      <a href="#feature-engineering">Feature Engineering</a>
+      <a href="#model-analysis">Model Analysis</a>
+      <a href="#results">Results</a>
+      <a href="#conclusion">Conclusion</a>
+      <a href="#appendix">Appendix</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <details open id="overview">
+      <summary>1. Research Overview</summary>
+      <section class="section-body">
+        <div class="grid two">
+          <article class="card">
+            <h2>Research Question</h2>
+            <p>
+              Does better ESG performance improve firm financial performance (ROA)?
+              This template follows a complete workflow from data preparation to model interpretation.
+            </p>
+            <ul>
+              <li>Dependent variable: <strong>ROA</strong></li>
+              <li>Key explanatory variables: <strong>ESG_score</strong>, and ESG dimensions</li>
+              <li>Controls: <strong>Firm Size</strong>, <strong>Leverage</strong></li>
+            </ul>
+          </article>
+          <article class="card">
+            <h2>Conceptual Framework</h2>
+            <p class="hint">Shows how ESG and controls may affect ROA through risk reduction, reputation, and operational efficiency channels.</p>
+            <div id="conceptual-framework" class="plot"></div>
+          </article>
+        </div>
+      </section>
+    </details>
+
+    <details open id="data-overview">
+      <summary>2. Data Overview</summary>
+      <section class="section-body">
+        <div class="grid two">
+          <article class="card">
+            <h2>Dataset Summary</h2>
+            <div id="dataset-summary"></div>
+            <div class="upload-box">
+              <label for="file-input">Upload CSV or JSON (optional)</label>
+              <input id="file-input" type="file" accept=".csv,.json">
+              <small>Expected fields: firm, year, ROA, ESG_score, ESG_Environment, ESG_Social, ESG_Governance, FirmSize, Leverage</small>
+            </div>
+          </article>
+          <article class="card">
+            <h2>Variable Dictionary</h2>
+            <div id="variable-dictionary"></div>
+          </article>
+        </div>
+
+        <article class="card">
+          <h2>Interactive Data Table</h2>
+          <div class="table-controls">
+            <input id="table-search" type="search" placeholder="Search firm / value">
+            <label for="table-page-size">Rows per page</label>
+            <select id="table-page-size">
+              <option value="5">5</option>
+              <option value="10" selected>10</option>
+              <option value="20">20</option>
+            </select>
+          </div>
+          <div class="table-wrap">
+            <table id="data-table">
+              <thead id="data-table-head"></thead>
+              <tbody id="data-table-body"></tbody>
+            </table>
+          </div>
+          <div class="table-pagination">
+            <button id="prev-page" type="button">Prev</button>
+            <span id="page-info"></span>
+            <button id="next-page" type="button">Next</button>
+          </div>
+        </article>
+      </section>
+    </details>
+
+    <details open id="eda">
+      <summary>3. Exploratory Data Analysis</summary>
+      <section class="section-body">
+        <article class="card">
+          <h2>EDA Variable Selection</h2>
+          <div class="control-row">
+            <div>
+              <label for="eda-variable-select">Select variables (multi-select, 3-6 recommended)</label>
+              <select id="eda-variable-select" multiple size="8"></select>
+            </div>
+            <div>
+              <button id="apply-eda-vars" type="button">Apply Selection</button>
+            </div>
+          </div>
+        </article>
+
+        <div class="grid two">
+          <article class="card">
+            <h2>Distribution Viewer</h2>
+            <label for="dist-variable">Variable</label>
+            <select id="dist-variable"></select>
+            <div id="dist-plot" class="plot"></div>
+          </article>
+          <article class="card">
+            <h2>Scatter Plot Explorer</h2>
+            <div class="control-row">
+              <div>
+                <label for="scatter-x">X Variable</label>
+                <select id="scatter-x"></select>
+              </div>
+              <div>
+                <label for="scatter-y">Y Variable</label>
+                <select id="scatter-y"></select>
+              </div>
+            </div>
+            <div id="scatter-plot" class="plot"></div>
+          </article>
+        </div>
+        <article class="card">
+          <h2>Parallel Coordinates Plot</h2>
+          <div id="parallel-columns" class="hint"></div>
+          <div id="parallel-plot" class="plot"></div>
+        </article>
+        <article class="card">
+          <h2>Triangular Correlation Matrix</h2>
+          <p class="hint">Lower triangle: correlation heatmap | Upper triangle: pairwise scatter | Diagonal: variable distribution</p>
+          <div id="corr-plot" class="plot"></div>
+        </article>
+      </section>
+    </details>
+
+    <details open id="feature-engineering">
+      <summary>4. Feature Engineering</summary>
+      <section class="section-body">
+        <article class="card">
+          <h2>Distribution Plot (Histogram)</h2>
+          <div class="control-row">
+            <div>
+              <label for="feature-variable">Variable</label>
+              <select id="feature-variable"></select>
+            </div>
+            <div>
+              <label for="transform-type">Transformation</label>
+              <select id="transform-type">
+                <option value="none">None</option>
+                <option value="log">Log (ln(1+x))</option>
+                <option value="zscore">Z-score</option>
+                <option value="minmax">Min-Max</option>
+              </select>
+            </div>
+          </div>
+          <div class="grid two">
+            <div>
+              <p class="hint">Original distribution</p>
+              <div id="feature-dist-original" class="plot"></div>
+            </div>
+            <div>
+              <p class="hint">Transformed distribution</p>
+              <div id="feature-dist-transformed" class="plot"></div>
+            </div>
+          </div>
+        </article>
+      </section>
+    </details>
+
+    <details open id="model-analysis">
+      <summary>5. Model Analysis</summary>
+      <section class="section-body">
+        <div class="grid two">
+          <article class="card">
+            <h2>Interactive Model Builder</h2>
+            <div class="control-row">
+              <div>
+                <label for="dep-var">Dependent Variable</label>
+                <select id="dep-var"></select>
+              </div>
+              <div>
+                <label for="factor-var">Candidate Independent Variable</label>
+                <select id="factor-var"></select>
+              </div>
+            </div>
+            <div class="control-row">
+              <button id="add-factor" type="button">Add Factor</button>
+              <button id="clear-factors" type="button">Clear Factors</button>
+              <button id="apply-baseline" type="button">Use Baseline Preset</button>
+              <button id="apply-extended" type="button">Use Extended Preset</button>
+            </div>
+            <div>
+              <label>Selected Factors</label>
+              <div id="model-factor-list" class="chip-list"></div>
+            </div>
+
+            <div class="feature-box">
+              <h3>Add New Engineered Variable</h3>
+              <p class="hint">Use formula with column placeholders: <code>{Market_cap}</code>, <code>{Total_assets}</code>, <code>log({Total_assets})</code>, <code>{Net_income}/{Total_assets}</code></p>
+              <div class="control-row">
+                <div>
+                  <label for="model-feature-name">New Variable Name</label>
+                  <input id="model-feature-name" type="text" placeholder="e.g., Profitability_Proxy">
+                </div>
+                <div>
+                  <label for="model-feature-formula">Formula</label>
+                  <input id="model-feature-formula" type="text" placeholder="e.g., {Net_income} / {Total_assets}">
+                </div>
+              </div>
+              <button id="add-model-feature" type="button">Create Variable</button>
+            </div>
+
+            <div class="feature-box">
+              <h3>One-Hot Encoder (Categorical)</h3>
+              <div class="control-row">
+                <div>
+                  <label for="onehot-source">Categorical Variable</label>
+                  <select id="onehot-source"></select>
+                </div>
+                <div>
+                  <label for="onehot-prefix">Prefix</label>
+                  <input id="onehot-prefix" type="text" placeholder="e.g., ind">
+                </div>
+              </div>
+              <div class="control-row">
+                <label><input id="onehot-drop-first" type="checkbox"> Drop first category</label>
+              </div>
+              <button id="create-onehot" type="button">Generate One-Hot Variables</button>
+            </div>
+
+            <div class="control-row">
+              <button id="run-model" type="button">Run Model</button>
+            </div>
+            <div id="model-message" class="hint"></div>
+          </article>
+
+          <article class="card">
+            <h2>Model Equation and Metrics</h2>
+            <pre id="model-equation" class="equation-box">No model yet.</pre>
+            <div id="model-metrics" class="metric-grid"></div>
+            <h3>Model Summary Table</h3>
+            <div id="model-summary"></div>
+          </article>
+        </div>
+
+        <div class="grid two">
+          <article class="card">
+            <h2>Prediction vs Actual</h2>
+            <div id="pred-actual-plot" class="plot"></div>
+          </article>
+          <article class="card">
+            <h2>Residual Diagnostics</h2>
+            <div id="residual-plot" class="plot"></div>
+          </article>
+        </div>
+        <article class="card">
+          <h2>Coefficient Effect Plot</h2>
+          <div id="coef-plot" class="plot"></div>
+        </article>
+      </section>
+    </details>
+
+    <details open id="results">
+      <summary>6. Results</summary>
+      <section class="section-body">
+        <article class="card">
+          <h2>Empirical Findings Notes</h2>
+          <p>Use this section to summarize significant variables, signs of coefficients, and robustness observations from the model panel above.</p>
+        </article>
+      </section>
+    </details>
+
+    <details open id="conclusion">
+      <summary>7. Conclusion</summary>
+      <section class="section-body">
+        <article class="card">
+          <h2>Interpretation Placeholders</h2>
+          <ul>
+            <li><strong>Key findings:</strong> Fill after model estimation.</li>
+            <li><strong>Interpretation:</strong> Explain economic meaning of ESG coefficients.</li>
+            <li><strong>Implications:</strong> Risk management, reputation, investor attraction.</li>
+            <li><strong>Limitations:</strong> Sample scope, omitted variables, endogeneity.</li>
+            <li><strong>Future work:</strong> Dynamic panel, causal inference, industry heterogeneity.</li>
+          </ul>
+        </article>
+      </section>
+    </details>
+
+    <details open id="appendix">
+      <summary>8. Appendix</summary>
+      <section class="section-body">
+        <article class="card">
+          <h2>Additional Notes</h2>
+          <p>Use this section for full regression tables, robustness checks, and additional plots.</p>
+        </article>
+      </section>
+    </details>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjs@12.4.1/lib/browser/math.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
